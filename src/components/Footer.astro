@@ -1,0 +1,68 @@
+---
+import { Image } from "astro:assets";
+import catStars from '../assets/cat-stars.png';
+---
+
+<footer>
+    <div class="footer-content">
+        <div class="bday-grid">
+            <div class="col">
+                <span class="top">B</span>
+                <span class="bottom">2</span>
+            </div>
+            <div class="col">
+                <span class="top">D</span>
+                <span class="bottom">0</span>
+            </div>
+            <div class="col">
+                <span class="top">A</span>
+                <span class="bottom">2</span>
+            </div>
+            <div class="col">
+                <span class="top">Y</span>
+                <span class="bottom">6</span>
+            </div>
+        </div>
+        <Image src={catStars} alt="gato con estrellas" class="cat-stars" />
+    </div>
+</footer>
+
+<style>
+    footer {
+        min-width: 412px;
+        padding: 2rem;
+    }
+
+    .footer-content {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .bday-grid {
+        display: flex;
+    }
+
+    .col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .top, .bottom {
+        font-family: Perodas, "Century Gothic", serif;
+        font-size: 8rem;
+        line-height: 0.65;
+        display: block;
+    }
+
+    .bottom {
+        transform: scaleY(-1);
+    }
+
+    .cat-stars {
+        width: 140px;
+        height: auto;
+    }
+</style>

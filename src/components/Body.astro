@@ -1,0 +1,126 @@
+---
+import { Image } from "astro:assets";
+import cats from '../assets/cats.png';
+---
+
+<section id="body">
+    <p class="scroll-indicator">&lbrace;scroll&rbrace;</p>
+
+    <div class="message">
+        <div class="first-message">
+            <p>
+                Belen!! te deseo un feliz
+                <span>CUM</span>pleaños! 21
+            </p>
+            <p>
+                Espero este año este lleno
+                de felicidad y muchos puchos (invita .i.)
+            </p>
+        </div>
+        <Image src={cats} alt="gatitos" class="body-cats" />
+        <div>
+            <p>
+                Y que sigas cumpliendo
+                mas, muchisimos años mas.
+                Por favor te pido dejes
+                el LOL, un beso &lt;3
+            </p>
+        </div>
+    </div>
+</section>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Bounce mientras es visible
+    gsap.to(".scroll-indicator", {
+        y: -8,
+        duration: 0.6,
+        repeat: -1,
+        yoyo: true,
+        ease: "power1.inOut",
+    });
+
+    // Scramble text de {scroll} a Happy Bday!
+    const scrambleEl = document.querySelector(".scroll-indicator");
+    const target = "Happy Bday!";
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz{}!";
+    let scrambleTriggered = false;
+
+    ScrollTrigger.create({
+        trigger: ".scroll-indicator",
+        start: "top 70%",
+        onEnter: () => {
+            if (scrambleTriggered) return;
+            scrambleTriggered = true;
+
+            let iteration = 0;
+            const interval = setInterval(() => {
+                scrambleEl.textContent = target
+                  .split("")
+                  .map((char, i) => {
+                      if (i < iteration) return target[i];
+                      return chars[Math.floor(Math.random() * chars.length)];
+                  })
+                  .join("");
+
+                iteration += 0.5;
+
+                if (iteration > target.length) {
+                    clearInterval(interval);
+                    scrambleEl.textContent = target;
+                }
+            }, 40);
+        },
+    });
+
+    // Mensajes aparecen al scroll
+    gsap.utils.toArray(".message > div, .message > .body-cats").forEach((el) => {
+        gsap.from(el, {
+            y: 40,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power2.out",
+            scrollTrigger: {
+                trigger: el,
+                start: "top 85%",
+            },
+        });
+    });
+</script>
+
+<style>
+    #body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 412px;
+    }
+
+    .scroll-indicator {
+        font-family: "Perodas", sans-serif;
+        font-size: 2.25rem;
+    }
+
+    .message {
+        font-family: "Mazzy TM", cursive;
+        font-size: 3.625rem;
+        line-height: 1.2;
+        width: 22.5rem;
+    }
+
+    .message p {
+        margin: 0;
+    }
+
+    .first-message {
+        text-align: right;
+    }
+
+    .body-cats {
+        height: auto;
+    }
+</style>

@@ -1,0 +1,210 @@
+---
+import { Image } from "astro:assets";
+import Limon from '../assets/limon.svg';
+import weirdStar from '../assets/WEIRD-STAR.png'
+import starStar from '../assets/STAR.png';
+
+---
+<main>
+    <section id="hero">
+        <Image src={starStar} alt="star star" class='star'/>
+        <h1 class="hero-text">
+            <span class="hpy">
+                <span class="letter">H</span>
+                <span class="letter">P</span>
+                <span class="letter">Y</span>
+            </span>
+            <span class="cum">
+                <span class="letter">C</span>
+                <span class="letter">U</span>
+                <span class="letter">M</span>
+            </span>
+            <span class="bel">
+                <span class="letter">B</span>
+                <span class="letter">E</span>
+                <span class="letter">L</span>
+            </span>
+        </h1>
+        <Image src={weirdStar} alt="Weird Star" class='weird-star'/>
+    </section>
+    <div class="hero-cat">
+        <Limon />
+    </div>
+</main>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Entrada caótica de letras
+    gsap.from(".letter", {
+        x: () => gsap.utils.random(-300, 300),
+        y: () => gsap.utils.random(-300, 300),
+        rotation: () => gsap.utils.random(-180, 180),
+        opacity: 0,
+        scale: () => gsap.utils.random(0.3, 1.5),
+        duration: 1.2,
+        ease: "back.out(1.7)",
+        stagger: 0.08,
+        onComplete: () => {
+            document.querySelectorAll(".letter").forEach((letter) => {
+                gsap.to(letter, {
+                    rotation: () => gsap.utils.random(-3, 3),
+                    duration: () => gsap.utils.random(0.8, 1.5),
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                });
+            });
+        },
+    });
+
+    // Spin lento
+    gsap.to(".star", {
+        rotation: 360,
+        duration: 8,
+        repeat: -1,
+        ease: "none",
+    });
+
+    // weirdStar cae y rebota
+    gsap.from(".weird-star", {
+        y: -300,
+        opacity: 0,
+        duration: 1.5,
+        ease: "bounce.out",
+        onComplete: () => {
+            document.querySelectorAll(".weird-star").forEach((el) => {
+                gsap.to(el, {
+                    rotation: () => gsap.utils.random(-3, 3),
+                    duration: () => gsap.utils.random(0.8, 1.5),
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "bounce.out",
+                });
+            });
+        },
+    });
+
+    // Parallax estrellas - se mueven más rápido que el contenido
+    gsap.to(".star", {
+        yPercent: -80,
+        ease: "none",
+        scrollTrigger: {
+            trigger: "main",
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+        },
+    });
+
+    gsap.to(".weird-star", {
+        yPercent: -120,
+        ease: "none",
+        scrollTrigger: {
+            trigger: "main",
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+        },
+    });
+
+    // Texto hero se queda sticky y sale lento
+    gsap.to(".hero-text", {
+        yPercent: -30,
+        opacity: 0,
+        ease: "none",
+        scrollTrigger: {
+            trigger: "main",
+            start: "top top",
+            end: "40% top",
+            scrub: true,
+        },
+    });
+
+    // Gato parallax - se mueve más lento
+    gsap.to(".hero-cat", {
+        yPercent: -50,
+        ease: "none",
+        scrollTrigger: {
+            trigger: "main",
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+        },
+    });
+
+    // Glitch cuando no hay scroll
+    let scrollTimeout;
+    let glitchTween = gsap.to(".hero-cat", {
+        x: () => gsap.utils.random(-3, 3),
+        duration: 0.05,
+        repeat: -1,
+        repeatRefresh: true,
+        ease: "none",
+    });
+
+    ScrollTrigger.create({
+        onUpdate: () => {
+            glitchTween.pause();
+            clearTimeout(scrollTimeout);
+            gsap.set(".hero-cat", { x: 0 });
+            scrollTimeout = setTimeout(() => {
+                glitchTween.resume();
+            }, 150);
+        },
+    });
+</script>
+
+<style>
+    main {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    h1 {
+        font-size: 8rem;
+        line-height: 0.95;
+        font-family: Perodas, "Century Gothic",serif;
+        margin: 0;
+    }
+
+    #hero {
+        position: relative;
+        display: inline-flex;
+        justify-content: center;
+        min-width: 25rem;
+    }
+
+    .hero-text {
+        display: flex;
+        flex-direction: column;
+        padding: 3rem;
+        min-width: 100%;
+    }
+
+    .hpy { text-align: left; }
+    .cum { text-align: center; }
+    .bel { text-align: right; }
+
+    .letter {
+        display: inline-block;
+    }
+
+    .weird-star {
+        position: absolute;
+        top: 3rem;
+        right: 0;
+        transform: translate(30%, -10%);
+    }
+
+    .star {
+        position: absolute;
+        bottom: 3rem;
+        left: 0;
+        transform: translate(-30%, -10%);
+    }
+</style>
