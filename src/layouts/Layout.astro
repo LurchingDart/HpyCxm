@@ -1,19 +1,31 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>BEL</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width" />
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	<link rel="icon" href="/favicon.ico" />
+	<meta name="generator" content={Astro.generator} />
+	<title>BEL</title>
+</head>
+<body>
+<slot />
+</body>
 </html>
 
-<style>
+<style is:global>
+	@font-face {
+		font-family: "Perodas";
+		src: url("/fonts/Perodas.otf") format("otf");
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Mazzy TM";
+		src: url("/fonts/MazzyTM-Regular.woff2") format("woff2");
+		font-display: swap;
+	}
+
 	html,
 	body {
 		margin: 0;
